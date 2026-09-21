@@ -1,6 +1,6 @@
 <?php
 /**
- * کارت محصول گیمینگ — نسخه حرفه‌ای.
+ * کارت محصول لوتینو — مطابق طرح مرجع.
  *
  * @package GMX_Theme
  */
@@ -19,10 +19,11 @@ $games       = get_the_terms( $product_id, 'gmx_game' );
 $game        = ( $games && ! is_wp_error( $games ) ) ? $games[0] : null;
 $seller_id   = (int) get_post_field( 'post_author' );
 $type_icons  = array(
-	'item'    => '🗡️',
-	'gem'     => '💎',
-	'account' => '👤',
-	'service' => '🛠️',
+	'item'      => '🗡️',
+	'gem'       => '💎',
+	'account'   => '👤',
+	'service'   => '🛠️',
+	'gift_card' => '🎁',
 );
 $icon        = $type && isset( $type_icons[ $type->slug ] ) ? $type_icons[ $type->slug ] : '🎮';
 ?>
@@ -39,13 +40,20 @@ $icon        = $type && isset( $type_icons[ $type->slug ] ) ? $type_icons[ $type
 		<?php if ( $auto ) : ?>
 			<span class="product-instant-badge">⚡ <?php esc_html_e( 'تحویل آنی', 'gmx-theme' ); ?></span>
 		<?php endif; ?>
-		<span class="product-hover-cta"><?php esc_html_e( 'مشاهده و خرید', 'gmx-theme' ); ?> ←</span>
 	</a>
 	<div class="product-body">
-		<?php if ( $game ) : ?>
-			<span class="product-game-line">🎯 <?php echo esc_html( $game->name ); ?></span>
-		<?php endif; ?>
 		<h3 class="product-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+		<?php if ( $game || $delivery ) : ?>
+			<div class="product-meta-line">
+				<?php if ( $game ) : ?><span class="pm-game">برای بازی: <strong><?php echo esc_html( $game->name ); ?></strong></span><?php endif; ?>
+				<?php if ( $delivery ) : ?><span class="pm-delivery">• <?php echo esc_html( $delivery ); ?></span><?php endif; ?>
+			</div>
+		<?php endif; ?>
+		<div class="product-stock">
+			<span class="stock-dot"></span>
+			<?php esc_html_e( 'موجود', 'gmx-theme' ); ?>
+			<?php if ( $auto ) : ?><span class="pm-instant">• ⚡ <?php esc_html_e( 'تحویل آنی', 'gmx-theme' ); ?></span><?php endif; ?>
+		</div>
 		<div class="product-footer">
 			<div class="product-price-wrap">
 				<?php if ( $price > 0 ) : ?>
@@ -53,11 +61,11 @@ $icon        = $type && isset( $type_icons[ $type->slug ] ) ? $type_icons[ $type
 				<?php else : ?>
 					<span class="product-price"><?php esc_html_e( 'تماس بگیرید', 'gmx-theme' ); ?></span>
 				<?php endif; ?>
-				<?php if ( $delivery ) : ?><small class="product-delivery">⏱ <?php echo esc_html( $delivery ); ?></small><?php endif; ?>
+				<?php if ( $seller_id ) : ?><small class="product-seller"><?php echo esc_html( function_exists( 'gmx_shop_name' ) ? gmx_shop_name( $seller_id ) : get_the_author() ); ?></small><?php endif; ?>
 			</div>
-			<span class="product-seller" title="<?php esc_attr_e( 'فروشنده', 'gmx-theme' ); ?>">
-				<?php echo esc_html( function_exists( 'gmx_shop_name' ) ? gmx_shop_name( $seller_id ) : get_the_author() ); ?>
-			</span>
 		</div>
+		<a class="btn btn-buy" href="<?php the_permalink(); ?>">
+			🛒 <?php esc_html_e( 'افزودن به سبد خرید', 'gmx-theme' ); ?>
+		</a>
 	</div>
 </article>

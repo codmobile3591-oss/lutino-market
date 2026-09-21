@@ -228,8 +228,7 @@ class GMX_Seller {
 			update_post_meta( $post_id, '_gmx_stock', $stock );
 			update_post_meta( $post_id, '_gmx_delivery_time', $dtime );
 			update_post_meta( $post_id, '_gmx_auto_delivery', $creds ? '1' : '' );
-			update_post_meta( $post_id, '_gmx_credentials', $creds );
-			if ( in_array( $type, array( 'item', 'gem', 'account', 'service' ), true ) ) {
+			update_post_meta( $post_id, '_gmx_credentials', $creds );				if ( in_array( $type, array( 'item', 'gem', 'account', 'service', 'gift_card' ), true ) ) {
 				wp_set_object_terms( $post_id, $type, 'gmx_product_type' );
 			}
 			if ( $game_id ) {

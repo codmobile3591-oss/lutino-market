@@ -116,7 +116,7 @@ delete_transient( 'gmx_seller_err_' . $user_id );
 					<div>
 						<label><?php esc_html_e( 'نوع محصول', 'gmx-market' ); ?></label>
 						<select name="product_type">
-							<?php foreach ( array( 'item' => 'آیتم', 'gem' => 'جم و ارز', 'account' => 'اکانت', 'service' => 'خدمات' ) as $k => $lbl ) : ?>
+							<?php foreach ( array( 'item' => 'آیتم', 'gem' => 'جم و ارز', 'account' => 'اکانت', 'service' => 'خدمات', 'gift_card' => 'گیفت کارت' ) as $k => $lbl ) : ?>
 								<option value="<?php echo esc_attr( $k ); ?>"<?php selected( $cur_type, $k ); ?>><?php echo esc_html( $lbl ); ?></option>
 							<?php endforeach; ?>
 						</select>

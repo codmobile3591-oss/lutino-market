@@ -261,10 +261,11 @@ function gmx_ticket_status_label( $status ) {
  */
 function gmx_product_type_label( $type ) {
 	$labels = array(
-		'item'    => __( 'آیتم', 'gmx-market' ),
-		'gem'     => __( 'جم', 'gmx-market' ),
-		'account' => __( 'اکانت', 'gmx-market' ),
-		'service' => __( 'سرویس', 'gmx-market' ),
+		'item'      => __( 'آیتم', 'gmx-market' ),
+		'gem'       => __( 'جم', 'gmx-market' ),
+		'account'   => __( 'اکانت', 'gmx-market' ),
+		'service'   => __( 'سرویس', 'gmx-market' ),
+		'gift_card' => __( 'گیفت کارت', 'gmx-market' ),
 	);
 	return isset( $labels[ $type ] ) ? $labels[ $type ] : $type;
 }
