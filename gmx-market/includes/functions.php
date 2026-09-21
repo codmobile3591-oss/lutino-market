@@ -82,6 +82,18 @@ function gmx_shop_name( $user_id ) {
 }
 
 /**
+ * خواندن تنظیم با مقدار پیش‌فرض (خالی = پیش‌فرض).
+ *
+ * @param string $key      کلید آپشن.
+ * @param string $default  پیش‌فرض.
+ * @return string
+ */
+function gmx_opt( $key, $default = '' ) {
+	$value = get_option( $key, '' );
+	return ( '' === $value || null === $value ) ? $default : $value;
+}
+
+/**
  * آواتار کاربر.
  *
  * @param int $user_id شناسه کاربر.

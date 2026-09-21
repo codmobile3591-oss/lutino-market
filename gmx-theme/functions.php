@@ -45,6 +45,20 @@ if ( ! function_exists( 'gmx_fa_num' ) ) {
 	}
 }
 
+if ( ! function_exists( 'gmx_opt' ) ) {
+	/**
+	 * خواندن تنظیم با پیش‌فرض (fallback در نبود افزونه).
+	 *
+	 * @param string $key     کلید.
+	 * @param string $default پیش‌فرض.
+	 * @return string
+	 */
+	function gmx_opt( $key, $default = '' ) {
+		$value = function_exists( 'get_option' ) ? get_option( $key, '' ) : '';
+		return ( '' === $value || null === $value ) ? $default : $value;
+	}
+}
+
 if ( ! function_exists( 'gmx_date' ) ) {
 	/**
 	 * تاریخ با wp_date.

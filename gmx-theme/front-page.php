@@ -60,37 +60,37 @@ $deal_deadline = strtotime( 'today +1 day', current_time( 'timestamp' ) );
 $stats_products = (int) wp_count_posts( 'gmx_product' )->publish;
 $stats_orders   = $can_qry ? (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}gmx_orders" ) : 0;
 $stats_users    = count_users();
-$stats_users    = isset( $stats_users['total_users'] ) ? (int) $stats_users['total_users'] : 0;
-
-// اسلایدهای بنر (لینک‌ها از تکسونومی واقعی ساخته می‌شوند).
+$stats_users    = isset( $stats_users['total_users'] ) ? (int) $stats_users['total_users'] : 0;// اسلایدهای بنر: از تنظیمات پنل + لینک هوشمند تکسونومی.
 $gem_term     = get_term_by( 'slug', 'gem', 'gmx_product_type' );
 $account_term = get_term_by( 'slug', 'account', 'gmx_product_type' );
-$slides = array(
+$gem_link     = ( $gem_term && ! is_wp_error( $gem_term ) ) ? get_term_link( $gem_term ) : get_post_type_archive_link( 'gmx_product' );
+$account_link = ( $account_term && ! is_wp_error( $account_term ) ) ? get_term_link( $account_term ) : get_post_type_archive_link( 'gmx_product' );
+$slides       = array(
 	array(
 		'emoji'  => '💎',
-		'tag'    => 'جم و ارز درون‌بازی',
-		'title'  => 'جم فوری با بهترین نرخ بازار',
-		'text'   => 'تحویل زیر ۵ دقیقه روی بازی‌های محبوب — اولین خرید با ۱۵٪ تخفیف.',
-		'btn'    => 'خرید جم',
-		'link'   => ( $gem_term && ! is_wp_error( $gem_term ) ) ? get_term_link( $gem_term ) : get_post_type_archive_link( 'gmx_product' ),
+		'tag'    => gmx_opt( 'gmx_slide1_tag', 'جم و ارز درون‌بازی' ),
+		'title'  => gmx_opt( 'gmx_slide1_title', 'جم فوری با بهترین نرخ بازار' ),
+		'text'   => gmx_opt( 'gmx_slide1_text', 'تحویل زیر ۵ دقیقه روی بازی‌های محبوب — اولین خرید با ۱۵٪ تخفیف.' ),
+		'btn'    => gmx_opt( 'gmx_slide1_btn', 'خرید جم' ),
+		'link'   => gmx_opt( 'gmx_slide1_link', $gem_link ),
 		'theme'  => 'slide-gem',
 	),
 	array(
 		'emoji'  => '🛡️',
-		'tag'    => 'معامله امانی',
-		'title'  => 'اکانت بخر، خیالت راحت',
-		'text'   => 'پول تا تایید تحویل نزد سایت امانت می‌ماند؛ اسکم ممنوع.',
-		'btn'    => 'دیدن اکانت‌ها',
-		'link'   => ( $account_term && ! is_wp_error( $account_term ) ) ? get_term_link( $account_term ) : get_post_type_archive_link( 'gmx_product' ),
+		'tag'    => gmx_opt( 'gmx_slide2_tag', 'معامله امانی' ),
+		'title'  => gmx_opt( 'gmx_slide2_title', 'اکانت بخر، خیالت راحت' ),
+		'text'   => gmx_opt( 'gmx_slide2_text', 'پول تا تایید تحویل نزد سایت امانت می‌ماند؛ اسکم ممنوع.' ),
+		'btn'    => gmx_opt( 'gmx_slide2_btn', 'دیدن اکانت‌ها' ),
+		'link'   => gmx_opt( 'gmx_slide2_link', $account_link ),
 		'theme'  => 'slide-account',
 	),
 	array(
 		'emoji'  => '🚀',
-		'tag'    => 'کسب درآمد',
-		'title'  => 'فروشنده لوتینو شو',
-		'text'   => 'آگهی‌ات را بگذار، ما امنیت پرداخت و مشتری را می‌آوریم.',
-		'btn'    => 'ثبت آگهی',
-		'link'   => home_url( '/my-account/seller/' ),
+		'tag'    => gmx_opt( 'gmx_slide3_tag', 'کسب درآمد' ),
+		'title'  => gmx_opt( 'gmx_slide3_title', 'فروشنده لوتینو شو' ),
+		'text'   => gmx_opt( 'gmx_slide3_text', 'آگهی‌ات را بگذار، ما امنیت پرداخت و مشتری را می‌آوریم.' ),
+		'btn'    => gmx_opt( 'gmx_slide3_btn', 'ثبت آگهی' ),
+		'link'   => gmx_opt( 'gmx_slide3_link', home_url( '/my-account/seller/' ) ),
 		'theme'  => 'slide-seller',
 	),
 );
@@ -131,14 +131,13 @@ $faqs = array(
 <!-- هیرو + اسلایدر -->
 <section class="hero hero-v3">
 	<canvas class="hero-grid-bg" aria-hidden="true"></canvas>
-	<div class="container hero-v3-grid">
-		<div class="hero-v3-content">
-			<span class="hero-eyebrow"><i class="pulse-dot"></i> <?php esc_html_e( 'مارکت امن گیمرهای ایران', 'gmx-theme' ); ?></span>
-			<h1 class="hero-title">
-				<?php esc_html_e( 'خرید و فروش امن', 'gmx-theme' ); ?><br />
-				<span class="grad-text"><?php esc_html_e( 'آیتم، جم و اکانت', 'gmx-theme' ); ?></span>
-			</h1>
-			<p class="hero-desc"><?php esc_html_e( 'پرداخت امانی، چت مستقیم با فروشنده و تحویل سریع — همه‌چیز در یک مارکت حرفه‌ای.', 'gmx-theme' ); ?></p>
+	<div class="container hero-v3-grid">				<div class="hero-v3-content">
+					<span class="hero-eyebrow"><i class="pulse-dot"></i> <?php echo esc_html( gmx_opt( 'gmx_hero_eyebrow', 'مارکت امن گیمرهای ایران' ) ); ?></span>
+					<h1 class="hero-title">
+						<?php echo esc_html( gmx_opt( 'gmx_hero_title_l1', 'خرید و فروش امن' ) ); ?><br />
+						<span class="grad-text"><?php echo esc_html( gmx_opt( 'gmx_hero_title_l2', 'آیتم، جم و اکانت' ) ); ?></span>
+					</h1>
+					<p class="hero-desc"><?php echo esc_html( gmx_opt( 'gmx_hero_desc', 'پرداخت امانی، چت مستقیم با فروشنده و تحویل سریع — همه‌چیز در یک مارکت حرفه‌ای.' ) ); ?></p>
 			<form class="hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 				<input type="search" name="s" placeholder="<?php esc_attr_e( 'دنبال چی هستی؟ جم، اکانت، آیتم...', 'gmx-theme' ); ?>" />
 				<button type="submit" class="btn btn-primary"><?php esc_html_e( 'جستجو', 'gmx-theme' ); ?></button>
@@ -147,12 +146,11 @@ $faqs = array(
 				<span>✅ <?php esc_html_e( 'ضمانت بازگشت وجه', 'gmx-theme' ); ?></span>
 				<span>⚡ <?php esc_html_e( 'تحویل زیر ۵ دقیقه', 'gmx-theme' ); ?></span>
 				<span>🎧 <?php esc_html_e( 'پشتیبانی ۲۴/۷', 'gmx-theme' ); ?></span>
-			</div>
-			<div class="hero-stats">
-				<div><strong data-gmx-count="<?php echo esc_attr( $stats_products ); ?>"><?php echo esc_html( gmx_fa_num( $stats_products ) ); ?></strong><span><?php esc_html_e( 'آگهی فعال', 'gmx-theme' ); ?></span></div>
-				<div><strong data-gmx-count="<?php echo esc_attr( $stats_orders ); ?>"><?php echo esc_html( gmx_fa_num( $stats_orders ) ); ?></strong><span><?php esc_html_e( 'سفارش موفق', 'gmx-theme' ); ?></span></div>
-				<div><strong data-gmx-count="<?php echo esc_attr( $stats_users ); ?>"><?php echo esc_html( gmx_fa_num( $stats_users ) ); ?></strong><span><?php esc_html_e( 'گیمر عضو', 'gmx-theme' ); ?></span></div>
-			</div>
+			</div>					<div class="hero-stats">
+						<div><strong data-gmx-count="<?php echo esc_attr( $stats_products ); ?>"><?php echo esc_html( gmx_fa_num( $stats_products ) ); ?></strong><span><?php echo esc_html( gmx_opt( 'gmx_hero_stat1_l', 'آگهی فعال' ) ); ?></span></div>
+						<div><strong data-gmx-count="<?php echo esc_attr( $stats_orders ); ?>"><?php echo esc_html( gmx_fa_num( $stats_orders ) ); ?></strong><span><?php echo esc_html( gmx_opt( 'gmx_hero_stat2_l', 'سفارش موفق' ) ); ?></span></div>
+						<div><strong data-gmx-count="<?php echo esc_attr( $stats_users ); ?>"><?php echo esc_html( gmx_fa_num( $stats_users ) ); ?></strong><span><?php echo esc_html( gmx_opt( 'gmx_hero_stat3_l', 'گیمر عضو' ) ); ?></span></div>
+					</div>
 		</div>
 		<div class="hero-v3-slider">
 			<div class="gmx-slider" data-gmx-slider>
