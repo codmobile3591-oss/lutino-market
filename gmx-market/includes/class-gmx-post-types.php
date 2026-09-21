@@ -20,10 +20,42 @@ class GMX_Post_Types {
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_post_types' ) );
 		add_action( 'init', array( $this, 'register_taxonomies' ) );
+		add_action( 'init', array( $this, 'register_top_rewrite_rules' ), 20 );
+		add_filter( 'rewrite_rules_array', array( $this, 'force_top_rewrite_rules' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'save_post_gmx_product', array( $this, 'save_meta' ), 10, 2 );
 		add_filter( 'manage_gmx_product_posts_columns', array( $this, 'admin_columns' ) );
 		add_action( 'manage_gmx_product_posts_custom_column', array( $this, 'admin_column_content' ), 10, 2 );
+	}
+
+	/**
+	 * قوانین بازنویسی اولویت‌دار.
+	 *
+	 * اسلاگ تکسونومی‌ها زیر اسلاگ CPT («shop») تعریف شده است؛ قانون پیوست CPT
+	 * به‌خاطر طول بیشتر، قانون تکسونومی را می‌بلعد (۴۰۴). با ثبت «top» این
+	 * قوانین همیشه بالای همه‌ی قوانین تولیدشده قرار می‌گیرند.
+	 */
+	public function register_top_rewrite_rules() {
+		add_rewrite_rule( 'shop/type/([^/]+)/?$', 'index.php?gmx_product_type=$matches[1]', 'top' );
+		add_rewrite_rule( 'shop/type/([^/]+)/page/([0-9]{1,})/?$', 'index.php?gmx_product_type=$matches[1]&paged=$matches[2]', 'top' );
+		add_rewrite_rule( 'shop/game/([^/]+)/?$', 'index.php?gmx_game=$matches[1]', 'top' );
+		add_rewrite_rule( 'shop/game/([^/]+)/page/([0-9]{1,})/?$', 'index.php?gmx_game=$matches[1]&paged=$matches[2]', 'top' );
+	}
+
+	/**
+	 * تضمین جایگاه بالای قوانین در هر بازسازی فلاش.
+	 *
+	 * @param array $rules همه قوانین.
+	 * @return array
+	 */
+	public function force_top_rewrite_rules( $rules ) {
+		$top = array(
+			'shop/type/([^/]+)/page/([0-9]{1,})/?$' => 'index.php?gmx_product_type=$matches[1]&paged=$matches[2]',
+			'shop/type/([^/]+)/?$'                  => 'index.php?gmx_product_type=$matches[1]',
+			'shop/game/([^/]+)/page/([0-9]{1,})/?$' => 'index.php?gmx_game=$matches[1]&paged=$matches[2]',
+			'shop/game/([^/]+)/?$'                  => 'index.php?gmx_game=$matches[1]',
+		);
+		return $top + $rules;
 	}
 
 	/**
@@ -45,7 +77,7 @@ class GMX_Post_Types {
 				'has_archive'   => true,
 				'menu_icon'     => 'dashicons-games',
 				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'author' ),
-				'rewrite'       => array( 'slug' => 'product' ),
+				'rewrite'       => array( 'slug' => 'shop' ),
 				'show_in_rest'  => true,
 			)
 		);
@@ -83,6 +115,10 @@ class GMX_Post_Types {
 				'hierarchical' => true,
 				'show_admin_column' => true,
 				'show_in_rest' => true,
+				'rewrite'      => array(
+					'slug'       => 'shop/game',
+					'with_front' => false,
+				),
 			)
 		);
 	}
