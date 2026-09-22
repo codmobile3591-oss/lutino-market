@@ -19,6 +19,25 @@ class GMX_Auth {
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'rest_routes' ) );
+
+		// پس از ورود با رمز: اگر مقصد مشخصی تعیین نشده، به صفحه اصلی برگرد نه داشبورد.
+		add_filter( 'login_redirect', array( $this, 'login_redirect' ), 10, 3 );
+	}
+
+	/**
+	 * مقصد پس از ورود با رمز عبور.
+	 *
+	 * @param string  $redirect_to     مقصد پیش‌فرض.
+	 * @param string  $requested_to    مقصد درخواستی (پارامتر redirect_to).
+	 * @param WP_User $user            کاربر.
+	 * @return string
+	 */
+	public function login_redirect( $redirect_to, $requested_to, $user ) {
+		unset( $user );
+		if ( empty( $requested_to ) ) {
+			return home_url( '/' );
+		}
+		return $redirect_to;
 	}
 
 	/**
@@ -291,7 +310,7 @@ class GMX_Auth {
 			array(
 				'ok'       => true,
 				'user_id'  => $user_id,
-				'redirect' => home_url( '/my-account/' ),
+				'redirect' => home_url( '/' ),
 			)
 		);
 	}
