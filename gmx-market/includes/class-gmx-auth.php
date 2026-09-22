@@ -25,7 +25,7 @@ class GMX_Auth {
 	}
 
 	/**
-	 * مقصد پس از ورود با رمز عبور.
+	 * مقصد پس از ورود با رمز عبور: همیشه صفحه اصلی سایت.
 	 *
 	 * @param string  $redirect_to     مقصد پیش‌فرض.
 	 * @param string  $requested_to    مقصد درخواستی (پارامتر redirect_to).
@@ -33,11 +33,8 @@ class GMX_Auth {
 	 * @return string
 	 */
 	public function login_redirect( $redirect_to, $requested_to, $user ) {
-		unset( $user );
-		if ( empty( $requested_to ) ) {
-			return home_url( '/' );
-		}
-		return $redirect_to;
+		unset( $redirect_to, $requested_to, $user );
+		return home_url( '/' );
 	}
 
 	/**
