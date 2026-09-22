@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GMX_THEME_VERSION', '1.2.0' );
+define( 'GMX_THEME_VERSION', '1.3.0' );
 define( 'GMX_THEME_DIR', get_template_directory() );
 define( 'GMX_THEME_URL', get_template_directory_uri() );
 
