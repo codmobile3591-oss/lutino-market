@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GMX_THEME_VERSION', '1.3.0' );
+define( 'GMX_THEME_VERSION', '1.4.0' );
 define( 'GMX_THEME_DIR', get_template_directory() );
 define( 'GMX_THEME_URL', get_template_directory_uri() );
 
@@ -103,6 +103,7 @@ function gmx_theme_assets() {
 	wp_enqueue_style( 'gmx-theme-fonts', 'https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css', array(), GMX_THEME_VERSION );
 	wp_enqueue_style( 'gmx-theme-style', get_stylesheet_uri(), array( 'gmx-theme-fonts' ), GMX_THEME_VERSION );
 	wp_enqueue_style( 'gmx-theme-main', GMX_THEME_URL . '/assets/css/main.css', array( 'gmx-theme-style' ), GMX_THEME_VERSION );
+	wp_enqueue_script( 'gmx-theme-core', GMX_THEME_URL . '/assets/js/theme.js', array(), GMX_THEME_VERSION, true );
 
 	if ( is_singular() && comments_open() ) {
 		wp_enqueue_script( 'comment-reply' );

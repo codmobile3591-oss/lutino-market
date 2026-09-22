@@ -438,3 +438,19 @@
 	.seller-cta-side { width: 100%; }
 	.seller-cta .btn { width: 100%; justify-content: center; }
 }
+
+/* ---------- ریسپانسیو تکمیلی صفحه اصلی ---------- */
+@media (max-width: 767px) {
+	.cat-cards-row { gap: 10px; }
+	.cat-card { border-radius: 13px; }
+	.cat-card-sub { max-width: 120px; }
+	.hero-art { min-height: 340px; }
+	.why-grid { gap: 10px; }
+	.news-grid { grid-template-columns: 1fr; }
+	.top-sellers-row { flex-wrap: wrap; }
+}
+@media (max-width: 575px) {
+	.hero-art { min-height: 300px; padding: 18px; }
+	.hst-item { padding: 12px 14px; }
+	.section-head { flex-wrap: wrap; gap: 8px; }
+}

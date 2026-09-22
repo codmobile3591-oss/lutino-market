@@ -35,6 +35,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php endif; ?>
 		</div>
 
+		<button class="nav-toggle" id="gmx-nav-toggle" aria-label="<?php esc_attr_e( 'باز و بسته کردن منو', 'gmx-theme' ); ?>" aria-expanded="false" aria-controls="gmx-mobile-nav">
+			<span></span><span></span><span></span>
+		</button>
+
 		<nav class="main-nav nav-pills" aria-label="<?php esc_attr_e( 'منوی اصلی', 'gmx-theme' ); ?>">
 			<?php
 			if ( has_nav_menu( 'primary' ) ) {
@@ -49,6 +53,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			?>
 		</nav>
+
+		<div class="mobile-nav" id="gmx-mobile-nav" hidden>
+			<?php
+			if ( has_nav_menu( 'primary' ) ) {
+				wp_nav_menu(
+					array(
+						'theme_location' => 'primary',
+						'container'      => false,
+						'menu_class'     => 'mobile-nav-list',
+						'depth'          => 1,
+					)
+				);
+			}
+			?>
+			<?php if ( ! is_user_logged_in() ) : ?>
+				<a class="mobile-nav-cta" href="<?php echo esc_url( wp_login_url( home_url( '/my-account/' ) ) ); ?>">🔐 <?php esc_html_e( 'ورود / ثبت نام', 'gmx-theme' ); ?></a>
+			<?php endif; ?>
+		</div>
 
 		<div class="header-actions">
 			<?php if ( is_user_logged_in() ) : ?>
