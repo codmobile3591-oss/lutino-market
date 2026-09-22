@@ -139,8 +139,21 @@ class GMX_Auth {
 			// حالت تست: کد در لاگ و پاسخ (فقط محیط توسعه).
 			error_log( '[GMX OTP] ' . $phone . ' => ' . $code );
 			set_transient( 'gmx_otp_last_' . get_current_user_id(), $code, 120 );
-		} else {
-			GMX_Notify::sms( $phone, sprintf( __( 'کد ورود شما: %s', 'gmx-market' ), $code ) );
+			return true;
+		}
+
+		// ارسال واقعی با سرویس پیامک.
+		$sent = GMX_Notify::sms(
+			$phone,
+			sprintf(
+				/* translators: %s: کد یکبارمصرف */
+				__( 'کد ورود شما به %1$s: %2$s', 'gmx-market' ),
+				get_bloginfo( 'name' ),
+				$code
+			)
+		);
+		if ( ! $sent ) {
+			return new WP_Error( 'gmx_sms_failed', __( 'ارسال پیامک ناموفق بود. لطفاً بعداً تلاش کنید یا با پشتیبانی تماس بگیرید.', 'gmx-market' ) );
 		}
 
 		return true;

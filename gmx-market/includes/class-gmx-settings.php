@@ -51,7 +51,7 @@ class GMX_Settings {
 			return;
 		}
 
-		$text_keys   = array( 'gmx_currency_unit', 'gmx_gateway', 'gmx_sms_provider', 'gmx_zarinpal_merchant', 'gmx_idpay_api', 'gmx_payping_api', 'gmx_kavenegar_key', 'gmx_melipayamak_user', 'gmx_melipayamak_pass', 'gmx_melipayamak_from', 'gmx_admin_mobile', 'gmx_notify_email', 'gmx_ticket_categories' );
+		$text_keys   = array( 'gmx_currency_unit', 'gmx_gateway', 'gmx_sms_provider', 'gmx_zarinpal_merchant', 'gmx_idpay_api', 'gmx_payping_api', 'gmx_kavenegar_key', 'gmx_kavenegar_sender', 'gmx_melipayamak_user', 'gmx_melipayamak_pass', 'gmx_melipayamak_from', 'gmx_admin_mobile', 'gmx_notify_email', 'gmx_ticket_categories' );
 		$hero_keys   = array(
 			'gmx_hero_eyebrow', 'gmx_hero_title_l1', 'gmx_hero_title_l2', 'gmx_hero_desc',
 			'gmx_hero_btn1', 'gmx_hero_btn2',
@@ -79,6 +79,9 @@ class GMX_Settings {
 				update_option( $key, (int) $_POST[ $key ] );
 			}
 		}
+
+		// چک‌باکس‌ها: اگر تیک نخورده باشند در POST نمی‌آیند — صریح صفر می‌کنیم.
+		update_option( 'gmx_otp_test_mode', isset( $_POST['gmx_otp_test_mode'] ) ? 1 : 0 );
 
 		add_action( 'admin_notices', function () {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'تنظیمات ذخیره شد.', 'gmx-market' ) . '</p></div>';
@@ -150,7 +153,22 @@ class GMX_Settings {
 					</tr>
 					<tr>
 						<th scope="row"><?php esc_html_e( 'کلید API کاوه‌نگار', 'gmx-market' ); ?></th>
-						<td><input type="text" name="gmx_kavenegar_key" value="<?php echo esc_attr( get_option( 'gmx_kavenegar_key' ) ); ?>" class="regular-text" dir="ltr" /></td>
+						<td><input type="text" name="gmx_kavenegar_key" value="<?php echo esc_attr( get_option( 'gmx_kavenegar_key' ) ); ?>" class="regular-text" dir="ltr" />
+							<p class="description"><?php esc_html_e( 'از پنل kavenegar.com ← تنظیمات ← API Key. همچنین می‌توانید در wp-config.php به‌صورت define( \'GMX_KAVENEGAR_KEY\', \'...\' ) تعریف کنید.', 'gmx-market' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'شماره فرستنده کاوه‌نگار (اختیاری)', 'gmx-market' ); ?></th>
+						<td><input type="text" name="gmx_kavenegar_sender" value="<?php echo esc_attr( get_option( 'gmx_kavenegar_sender' ) ); ?>" class="regular-text" dir="ltr" placeholder="10008663" />
+							<p class="description"><?php esc_html_e( 'خالی بگذارید تا از شماره خط عمومی/خدماتی پیش‌فرض حساب استفاده شود.', 'gmx-market' ); ?></p></td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'حالت تست کد ورود', 'gmx-market' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="gmx_otp_test_mode" value="1" <?php checked( get_option( 'gmx_otp_test_mode', 1 ), '1' ); ?> />
+								<?php esc_html_e( 'نمایش کد روی صفحه به‌جای ارسال پیامک واقعی (فقط برای توسعه — خاموش کنید تا پیامک واقعی کاوه‌نگار ارسال شود)', 'gmx-market' ); ?>
+							</label>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row"><?php esc_html_e( 'شماره موبایل مدیر برای اطلاع‌رسانی', 'gmx-market' ); ?></th>

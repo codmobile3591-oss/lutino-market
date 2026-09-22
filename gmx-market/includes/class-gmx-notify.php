@@ -74,17 +74,32 @@ class GMX_Notify {
 			}
 		} else {
 			$key = get_option( 'gmx_kavenegar_key' );
+			if ( ! $key && defined( 'GMX_KAVENEGAR_KEY' ) ) {
+				$key = GMX_KAVENEGAR_KEY; // امکان تعریف کلید در wp-config بدون ذخیره در دیتابیس.
+			}
 			if ( $key ) {
-				$res = wp_remote_get(
-					sprintf(
-						'https://api.kavenegar.com/v1/%s/sms/send.json?receptor=%s&message=%s',
-						rawurlencode( $key ),
-						rawurlencode( $to ),
-						rawurlencode( $text )
-					),
-					array( 'timeout' => 20 )
+				$sender = get_option( 'gmx_kavenegar_sender' );
+				$url    = sprintf(
+					'https://api.kavenegar.com/v1/%s/sms/send.json?receptor=%s&message=%s',
+					rawurlencode( $key ),
+					rawurlencode( $to ),
+					rawurlencode( $text )
 				);
-				$result = ! is_wp_error( $res ) && ( 200 === wp_remote_retrieve_response_code( $res ) );
+				if ( $sender ) {
+					$url .= '&sender=' . rawurlencode( $sender );
+				}
+				$res    = wp_remote_get( $url, array( 'timeout' => 20 ) );
+				$status = is_wp_error( $res ) ? 0 : wp_remote_retrieve_response_code( $res );
+				$body   = is_wp_error( $res ) ? $res->get_error_message() : wp_remote_retrieve_body( $res );
+
+				// ۲۰۰ = صف‌شده، ۲۰۱ = ارسال‌شده (طبق مستندات کاوه‌نگار هر دو موفق‌اند).
+				$result = ( 200 === $status || 201 === $status );
+
+				if ( ! $result ) {
+					error_log( '[GMX SMS] kavenegar fail to=' . $to . ' http=' . $status . ' body=' . substr( (string) $body, 0, 300 ) );
+				}
+			} else {
+				error_log( '[GMX SMS] kavenegar: no API key set' );
 			}
 		}
 
