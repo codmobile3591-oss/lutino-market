@@ -46,16 +46,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<div class="footer-socials">
-			<a href="#" aria-label="تلگرام" class="soc soc-tg">
+			<?php
+			// شبکه‌های اجتماعی: از تنظیمات افزونه/قالب، وگرنه آدرس نمونه برند.
+			$socials = array(
+				'tg' => array( gmx_opt( 'gmx_social_telegram', 'https://t.me/lutinogames' ), 'تلگرام' ),
+				'ig' => array( gmx_opt( 'gmx_social_instagram', 'https://instagram.com/lutinogames' ), 'اینستاگرام' ),
+				'dc' => array( gmx_opt( 'gmx_social_discord', 'https://discord.gg/lutinogames' ), 'دیسکورد' ),
+				'yt' => array( gmx_opt( 'gmx_social_youtube', 'https://youtube.com/@lutinogames' ), 'یوتیوب' ),
+			);
+			?>
+			<a href="<?php echo esc_url( $socials['tg'][0] ); ?>" aria-label="<?php echo esc_attr( $socials['tg'][1] ); ?>" target="_blank" rel="noopener" class="soc soc-tg">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2 2.5 9.5l5.5 2 2 6 3-4.5 4.5 3.5L22 2z"/></svg>
 			</a>
-			<a href="#" aria-label="اینستاگرام" class="soc soc-ig">
+			<a href="<?php echo esc_url( $socials['ig'][0] ); ?>" aria-label="<?php echo esc_attr( $socials['ig'][1] ); ?>" target="_blank" rel="noopener" class="soc soc-ig">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
 			</a>
-			<a href="#" aria-label="دیسکورد" class="soc soc-dc">
+			<a href="<?php echo esc_url( $socials['dc'][0] ); ?>" aria-label="<?php echo esc_attr( $socials['dc'][1] ); ?>" target="_blank" rel="noopener" class="soc soc-dc">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4c1.7.4 3.3 1.1 4.8 2.1a16.2 16.2 0 0 0-14 0c1.5-1 3.1-1.7 4.8-2.1L10.6 3a19.8 19.8 0 0 0-4.9 1.5A20.3 20.3 0 0 0 2.2 18.1a19.9 19.9 0 0 0 6 3l1.5-2.4c-.8-.3-1.6-.7-2.3-1.2l.6-.4a14.2 14.2 0 0 0 12 0l.6.4c-.7.5-1.5.9-2.3 1.2l1.5 2.4a19.9 19.9 0 0 0 6-3 20.3 20.3 0 0 0-3.5-13.7ZM8.7 15.3c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.9 2.1-1.9 2.1Zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z"/></svg>
 			</a>
-			<a href="#" aria-label="یوتیوب" class="soc soc-yt">
+			<a href="<?php echo esc_url( $socials['yt'][0] ); ?>" aria-label="<?php echo esc_attr( $socials['yt'][1] ); ?>" target="_blank" rel="noopener" class="soc soc-yt">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2s-.2-1.6-.9-2.3c-.9-.9-1.9-.9-2.3-1C16.6 3.7 12 3.7 12 3.7s-4.6 0-7.8.2c-.4.1-1.4.1-2.3 1-.7.7-.9 2.3-.9 2.3S.8 9.1.8 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.2 7.6.2s4.6 0 7.8-.3c.4-.1 1.4-.1 2.3-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8ZM9.7 14.9V8.4l6.1 3.3-6.1 3.2Z"/></svg>
 			</a>
 		</div>

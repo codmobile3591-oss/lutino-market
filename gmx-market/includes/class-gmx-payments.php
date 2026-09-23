@@ -139,13 +139,13 @@ class GMX_Payments {
 
 		switch ( $gateway ) {
 			case 'idpay':
-				$res = self::idpay_request( $amount, $cb, null, 'wallet' );
+				$res = self::idpay_request( $amount, $cb, null, 'wallet', (int) $user_id );
 				break;
 			case 'payping':
-				$res = self::payping_request( $amount, $cb, null, 'wallet' );
+				$res = self::payping_request( $amount, $cb, null, 'wallet', (int) $user_id );
 				break;
 			default:
-				$res = self::zarinpal_request( $amount, $cb, null, 'wallet' );
+				$res = self::zarinpal_request( $amount, $cb, null, 'wallet', (int) $user_id );
 		}
 
 		if ( is_wp_error( $res ) ) {
@@ -165,11 +165,12 @@ class GMX_Payments {
 	 *
 	 * @param float      $amount مبلغ.
 	 * @param string     $callback آدرس بازگشت.
-	 * @param object|null $order سفارش.
-	 * @param string     $kind   order|wallet.
+	 * @param object|null $order   سفارش.
+	 * @param string      $kind    order|wallet.
+	 * @param int         $user_id شناسه کاربر (برای شارژ کیف پول).
 	 * @return string|WP_Error
 	 */
-	private static function zarinpal_request( $amount, $callback, $order = null, $kind = 'order' ) {
+	private static function zarinpal_request( $amount, $callback, $order = null, $kind = 'order', $user_id = 0 ) {
 		$merchant = get_option( 'gmx_zarinpal_merchant' );
 		if ( ! $merchant ) {
 			return new WP_Error( 'gmx_no_merchant', __( 'مرچنت زرین‌پال تنظیم نشده است.', 'gmx-market' ) );
@@ -205,10 +206,11 @@ class GMX_Payments {
 		}
 
 		$authority = $data['data']['authority'];
+		$ref_id    = $order ? (int) $order->id : (int) $user_id;
 
 		self::record_pending(
 			$kind,
-			$order ? (int) $order->id : 0,
+			$ref_id,
 			$authority,
 			$amount
 		);
@@ -221,11 +223,12 @@ class GMX_Payments {
 	 *
 	 * @param float      $amount مبلغ.
 	 * @param string     $callback آدرس بازگشت.
-	 * @param object|null $order سفارش.
-	 * @param string     $kind   order|wallet.
+	 * @param object|null $order   سفارش.
+	 * @param string      $kind    order|wallet.
+	 * @param int         $user_id شناسه کاربر (برای شارژ کیف پول).
 	 * @return string|WP_Error
 	 */
-	private static function idpay_request( $amount, $callback, $order = null, $kind = 'order' ) {
+	private static function idpay_request( $amount, $callback, $order = null, $kind = 'order', $user_id = 0 ) {
 		$api_key = get_option( 'gmx_idpay_api' );
 		if ( ! $api_key ) {
 			return new WP_Error( 'gmx_no_api', __( 'کلید IDPay تنظیم نشده است.', 'gmx-market' ) );
@@ -260,9 +263,11 @@ class GMX_Payments {
 			return new WP_Error( 'gmx_gateway_error', sprintf( __( 'خطای IDPay: %s', 'gmx-market' ), $msg ) );
 		}
 
+		$ref_id = $order ? (int) $order->id : (int) $user_id;
+
 		self::record_pending(
 			$kind,
-			$order ? (int) $order->id : 0,
+			$ref_id,
 			$data['id'],
 			$amount
 		);
@@ -275,19 +280,27 @@ class GMX_Payments {
 	 *
 	 * @param float      $amount مبلغ.
 	 * @param string     $callback آدرس بازگشت.
-	 * @param object|null $order سفارش.
-	 * @param string     $kind   order|wallet.
+	 * @param object|null $order   سفارش.
+	 * @param string      $kind    order|wallet.
+	 * @param int         $user_id شناسه کاربر (برای شارژ کیف پول).
 	 * @return string|WP_Error
 	 */
-	private static function payping_request( $amount, $callback, $order = null, $kind = 'order' ) {
+	private static function payping_request( $amount, $callback, $order = null, $kind = 'order', $user_id = 0 ) {
 		$api_key = get_option( 'gmx_payping_api' );
 		if ( ! $api_key ) {
 			return new WP_Error( 'gmx_no_api', __( 'کلید PayPing تنظیم نشده است.', 'gmx-market' ) );
 		}
 
+		$payer_name = '';
+		if ( $order ) {
+			$payer_name = gmx_display_name( $order->user_id );
+		} elseif ( $user_id ) {
+			$payer_name = gmx_display_name( $user_id );
+		}
+
 		$body = array(
 			'amount'      => (int) round( $amount * 10 ), // ریال.
-			'payerName'   => $order ? gmx_display_name( $order->user_id ) : '',
+			'payerName'   => $payer_name,
 			'description' => $order ? 'سفارش ' . $order->order_no : 'شارژ کیف پول',
 			'returnUrl'   => $callback,
 			'clientRefId' => $order ? $order->order_no : 'wallet-' . time(),
@@ -314,9 +327,11 @@ class GMX_Payments {
 			return new WP_Error( 'gmx_gateway_error', __( 'خطای PayPing', 'gmx-market' ) );
 		}
 
+		$ref_id = $order ? (int) $order->id : (int) $user_id;
+
 		self::record_pending(
 			$kind,
-			$order ? (int) $order->id : 0,
+			$ref_id,
 			$data['code'],
 			$amount
 		);

@@ -91,7 +91,7 @@ function gmx_theme_setup() {
 		)
 	);
 
-	add_image_size( 'gmx-card', 420, 260, true );
+	add_image_size( 'gmx-card', 800, 450, true );
 	add_image_size( 'gmx-hero', 960, 520, true );
 }
 add_action( 'after_setup_theme', 'gmx_theme_setup' );
@@ -113,6 +113,14 @@ function gmx_theme_assets() {
 	if ( is_front_page() ) {
 		wp_enqueue_style( 'gmx-theme-front', GMX_THEME_URL . '/assets/css/front.css', array( 'gmx-theme-main' ), GMX_THEME_VERSION );
 		wp_enqueue_script( 'gmx-theme-front', GMX_THEME_URL . '/assets/js/front.js', array(), GMX_THEME_VERSION, true );
+		wp_localize_script(
+			'gmx-theme-front',
+			'gmxThemeRest',
+			array(
+				'url'   => esc_url_raw( rest_url() ),
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'gmx_theme_assets' );
@@ -167,11 +175,41 @@ function gmx_theme_unread_chats() {
 	$user_id = get_current_user_id();
 	$count   = (int) $wpdb->get_var(
 		$wpdb->prepare(
-			'SELECT COALESCE(SUM(CASE WHEN buyer_id = %1$d THEN seller_unread ELSE buyer_unread END),0) FROM ' . $wpdb->prefix . "gmx_chats WHERE buyer_id = %1\$d OR seller_id = %1\$d",
+			'SELECT COALESCE(SUM(CASE WHEN buyer_id = %d THEN seller_unread ELSE buyer_unread END),0) FROM ' . $wpdb->prefix . 'gmx_chats WHERE buyer_id = %d OR seller_id = %d',
+			$user_id,
+			$user_id,
 			$user_id
 		)
 	);
 	return $count;
+}
+
+/**
+ * REST: تازه‌سازی زنده اخبار صفحه اصلی (بازگشت HTML لیست).
+ */
+function gmx_theme_news_rest() {
+	register_rest_route(
+		'gmx/v1',
+		'/news',
+		array(
+			'methods'             => 'GET',
+			'callback'            => 'gmx_theme_news_rest_cb',
+			'permission_callback' => '__return_true',
+		)
+	);
+}
+add_action( 'rest_api_init', 'gmx_theme_news_rest' );
+
+/**
+ * خروجی HTML لیست اخبار برای polling.
+ *
+ * @return WP_REST_Response
+ */
+function gmx_theme_news_rest_cb() {
+	ob_start();
+	include GMX_THEME_DIR . '/template-parts/home-news-list.php';
+	$html = ob_get_clean();
+	return rest_ensure_response( array( 'html' => $html ) );
 }
 
 /**

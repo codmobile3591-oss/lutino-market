@@ -65,40 +65,20 @@ $product_tabs = array(
 // هنر و زیرعنوان دسته‌بندی‌ها — مطابق طرح مرجع (به ترتیب نمایش).
 $cat_art = array(
 	'gem'     => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-gems.jpg',     'sub' => 'خرید جم و ارز انواع بازی‌ها',       'tint' => 'tint-gem',     'order' => 1 ),
-	'account' => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-valorant.jpg', 'sub' => 'اکانت‌های آماده و ممتاز',           'tint' => 'tint-account', 'order' => 2 ),
-	'item'    => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-cod.jpg',      'sub' => 'آیتم‌های سطلی بالا و حرفه‌ای',      'tint' => 'tint-cod',     'order' => 3 ),
+	'account' => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-accounts.jpg', 'sub' => 'اکانت‌های آماده و ممتاز',           'tint' => 'tint-account', 'order' => 2 ),
+	'item'    => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-items.jpg',     'sub' => 'آیتم‌های سطلی بالا و حرفه‌ای',      'tint' => 'tint-cod',     'order' => 3 ),
 	'service' => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-steam.jpg',    'sub' => 'اکانت‌های استیم با اعتبار بالا',    'tint' => 'tint-steam',   'order' => 4 ),
 	'steam'   => array( 'img' => GMX_THEME_URL . '/assets/img/ref/cat-steam.jpg',    'sub' => 'اکانت‌های استیم با اعتبار بالا',    'tint' => 'tint-steam',   'order' => 4 ),
 );
 
-// اخبار نمایشی.
-$news_items = array(
-	array(
-		't'    => 'تخفیف ویژه برای اکانت‌های کالاف دیوتی',
-		'd'    => 'تا ۴۰٪ تخفیف روی آگهی‌های منتخب',
-		'img'  => GMX_THEME_URL . '/assets/img/ref/news-1.jpg',
-		'time' => '۱۴۰۵/۰۶/۲۱',
-	),
-	array(
-		't'    => 'افزایش موجودی اکانت‌های استیم',
-		'd'    => 'اکانت‌های جدید با سطح بالا اضافه شدند',
-		'img'  => GMX_THEME_URL . '/assets/img/ref/news-2.jpg',
-		'time' => '۱۴۰۵/۰۶/۱۲',
-	),
-	array(
-		't'    => 'روش‌های امن خرید و برداخت',
-		'd'    => 'راهنمای کامل گامرین برای معاملات امن',
-		'img'  => GMX_THEME_URL . '/assets/img/ref/news-3.jpg',
-		'time' => '۱۴۰۵/۰۶/۰۵',
-	),
-);
+// اخبار صفحه اصلی: منطق و داده در پارت template-parts/home-news.php.
 
-// نظرات نمایشی.
+// نظرات نمایشی — با جزئیات واقعی‌تر (خرید تأییدشده، تاریخ نسبی، تنوع ستاره).
 $reviews = array(
-	array( 'name' => 'امیرحسین', 'tag' => 'جم فری فایر', 'text' => 'کمتر از ۵ دقیقه جم رسید؛ پشتیبانی هم تا آخر همراهم بود. عالی بود.' ),
-	array( 'name' => 'سارا', 'tag' => 'اکانت Valorant', 'text' => 'اولش شک داشتم ولی سیستم امانی واقعاً خیال‌راحت‌کن بود. اکانت دقیقاً مثل توضیحات بود.' ),
-	array( 'name' => 'محمد', 'tag' => 'آیتم PUBG', 'text' => 'قیمت‌ها از همه‌جا بهتره و چت با فروشنده خیلی راحت حل‌کننده بود.' ),
-	array( 'name' => 'رضا', 'tag' => 'گیفت کارت', 'text' => 'دو بار خرید کردم، هر بار سریع و بدون دردسر. به دوستهامم معرفی کردم.' ),
+	array( 'name' => 'امیرحسین', 'tag' => 'جم فری فایر', 'text' => 'کمتر از ۵ دقیقه جم رسید؛ پشتیبانی هم تا آخر همراهم بود. عالی بود.', 'stars' => 5, 'date' => '۲ ساعت پیش', 'hue' => 265 ),
+	array( 'name' => 'سارا', 'tag' => 'اکانت Valorant', 'text' => 'اولش شک داشتم ولی سیستم امانی واقعاً خیال‌راحت‌کن بود. اکانت دقیقاً مثل توضیحات بود.', 'stars' => 5, 'date' => 'دیروز', 'hue' => 320 ),
+	array( 'name' => 'محمد', 'tag' => 'آیتم PUBG', 'text' => 'قیمت‌ها از همه‌جا بهتره و چت با فروشنده خیلی راحت حل‌کننده بود.', 'stars' => 4, 'date' => '۳ روز پیش', 'hue' => 190 ),
+	array( 'name' => 'رضا', 'tag' => 'گیفت کارت', 'text' => 'دو بار خرید کردم، هر بار سریع و بدون دردسر. به دوستهامم معرفی کردم.', 'stars' => 5, 'date' => 'هفته پیش', 'hue' => 150 ),
 );
 ?>
 
@@ -244,26 +224,7 @@ $reviews = array(
 				<div class="why-item"><span class="why-ic ic-6">💳</span><strong><?php esc_html_e( 'پرداخت آسان', 'gmx-theme' ); ?></strong><p><?php esc_html_e( 'درگاه‌های امن بانکی', 'gmx-theme' ); ?></p></div>
 			</div>
 		</div>
-		<div class="news-box">
-			<div class="section-head">
-				<h2 class="section-title"><span class="sec-ic">📢</span> <?php esc_html_e( 'آخرین اخبار و تخفیف‌ها', 'gmx-theme' ); ?></h2>
-			</div>
-			<div class="news-list">
-				<?php foreach ( $news_items as $n ) : ?>
-					<article class="news-item">
-						<div class="news-body">
-							<h3><?php echo esc_html( $n['t'] ); ?></h3>
-							<p><?php echo esc_html( $n['d'] ); ?></p>
-							<time><?php echo esc_html( $n['time'] ); ?></time>
-						</div>
-						<span class="news-thumb">
-							<img src="<?php echo esc_url( $n['img'] ); ?>" alt="" loading="lazy" />
-						</span>
-					</article>
-				<?php endforeach; ?>
-			</div>
-			<a class="btn btn-outline news-all-btn" href="#"><?php esc_html_e( 'مشاهده همه اخبار', 'gmx-theme' ); ?> <span class="btn-arrow">←</span></a>
-		</div>
+		<?php get_template_part( 'template-parts/home-news' ); ?>
 	</div>
 </section>
 
@@ -272,12 +233,19 @@ $reviews = array(
 	<h2 class="section-title"><span class="sec-ic">💬</span> <?php esc_html_e( 'گیمرها چی می‌گویند؟', 'gmx-theme' ); ?></h2>
 	<div class="reviews-grid">
 		<?php foreach ( $reviews as $r ) : ?>
-			<figure class="review-card">
-				<span class="review-stars">★★★★★</span>
+			<figure class="review-card" style="--av-h: <?php echo esc_attr( $r['hue'] ); ?>;">
+				<span class="review-stars" aria-label="<?php echo esc_attr( sprintf( '%d از ۵', $r['stars'] ) ); ?>"><?php echo esc_html( str_repeat( '★', $r['stars'] ) . str_repeat( '☆', 5 - $r['stars'] ) ); ?></span>
 				<blockquote><?php echo esc_html( $r['text'] ); ?></blockquote>
 				<figcaption>
 					<span class="review-avatar"><?php echo esc_html( mb_substr( $r['name'], 0, 1 ) ); ?></span>
-					<span><strong><?php echo esc_html( $r['name'] ); ?></strong><small><?php echo esc_html( $r['tag'] ); ?></small></span>
+					<span class="review-meta">
+						<strong><?php echo esc_html( $r['name'] ); ?></strong>
+						<small><?php echo esc_html( $r['tag'] ); ?></small>
+					</span>
+					<span class="review-badges">
+						<span class="review-verified">✓ خرید تأییدشده</span>
+						<time><?php echo esc_html( $r['date'] ); ?></time>
+					</span>
 				</figcaption>
 			</figure>
 		<?php endforeach; ?>

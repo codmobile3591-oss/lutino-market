@@ -42,10 +42,11 @@ $current_term_id = is_tax() ? (int) get_queried_object_id() : 0;
 			</div>
 
 			<?php
+			// فقط بازی‌هایی که حداقل یک آگهی دارند (تا فیلتر به صفحه خالی/۴۰۴ نرسد).
 			$games = get_terms(
 				array(
 					'taxonomy'   => 'gmx_game',
-					'hide_empty' => false,
+					'hide_empty' => true,
 					'number'     => 12,
 				)
 			);

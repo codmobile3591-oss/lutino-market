@@ -73,6 +73,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="header-actions">
+			<form class="header-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<input type="search" name="s" placeholder="<?php esc_attr_e( 'جستجوی آگهی...', 'gmx-theme' ); ?>" value="<?php echo esc_attr( get_search_query() ); ?>" />
+				<button type="submit" aria-label="<?php esc_attr_e( 'جستجو', 'gmx-theme' ); ?>">🔍</button>
+			</form>
 			<?php if ( is_user_logged_in() ) : ?>
 				<a class="header-pill header-cart" href="<?php echo esc_url( home_url( '/my-account/orders/' ) ); ?>">
 					<span class="hp-ic">

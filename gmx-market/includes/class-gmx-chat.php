@@ -20,6 +20,7 @@ class GMX_Chat {
 	public function __construct() {
 		// اتصال چت به سفارش: هنگام پرداخت موفق، گفتگو بساز.
 		add_action( 'gmx_order_status_changed', array( $this, 'maybe_create_order_chat' ), 10, 4 );
+		add_action( 'rest_api_init', array( $this, 'register_rest' ) );
 	}
 
 	/**
